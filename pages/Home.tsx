@@ -5,15 +5,15 @@ import FilterMenuItem from '../components/FilterMenuItem'
 import { Icon, Button } from 'react-native-elements'
 
 
-const Home = () => {
+const Home = ({ navigation }: any) => {
   //todo: menuFilter will be scrollable
 
   const searchProduct = () => {
     console.log('search button pressed')
   }
 
-  const createProductFunction = () => {
-    console.log('create prod button pressed')
+  const goToCreateProductPage = () => {
+    navigation.navigate('Create')
   }
 
   return (
@@ -36,7 +36,8 @@ const Home = () => {
           contentContainerStyle={styles.filterMenuScrollView}>
           <FilterMenuItem filterName={'All'} isSelected={false} />
           <FilterMenuItem filterName={'Accessories'} isSelected={false} />
-          <FilterMenuItem filterName={'Women-Clothing'} isSelected={false} />
+          <FilterMenuItem filterName={'Womens-Clothing'} isSelected={false} />
+          <FilterMenuItem filterName={'Mens-Clothing'} isSelected={false} />
           <FilterMenuItem filterName={'Furnitures'} isSelected={false} />
           <FilterMenuItem filterName={'Electronics'} isSelected={false} />
         </ScrollView>
@@ -53,7 +54,7 @@ const Home = () => {
       </ScrollView>
       <TouchableOpacity
         style={styles.createButtonContainer}
-        onPress={() => createProductFunction()}>
+        onPress={() => goToCreateProductPage()}>
         <Icon
           iconStyle={{ fontSize: 40 }}
           name='add'
