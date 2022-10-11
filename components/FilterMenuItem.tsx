@@ -1,18 +1,33 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface propTypes {
   filterName: string,
-  isSelected: boolean
+  filter: string,
+  setSelectedFilter: React.Dispatch<React.SetStateAction<string>>
 }
 
-const FilterMenuItem = ({ filterName }: propTypes) => {
+const FilterMenuItem = ({ filterName, setSelectedFilter, filter }: propTypes) => {
+
+  const [isSelected, setIsSelected] = useState<boolean>()
+
+  const selectFilter = () => { setSelectedFilter(filterName) }
+
   return (
     <TouchableOpacity
-      style={styles.container}
+      style={[styles.container,
+      filterName == filter ? {
+        backgroundColor: 'white',
+        borderWidth: 2,
+        padding: 8
+      } : {}
+      ]}
+      onPress={() => { selectFilter() }}
     >
       <Text
-        style={styles.filterMenuItemText}>
+        style={[styles.filterMenuItemText,
+        filterName == filter ? { color: 'black' } : {}
+        ]}>
         {filterName}
       </Text>
     </TouchableOpacity>

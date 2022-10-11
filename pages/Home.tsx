@@ -3,18 +3,21 @@ import React, { useEffect, useState } from 'react'
 import ProductComponent from '../components/ProductComponent'
 import FilterMenuItem from '../components/FilterMenuItem'
 import { Icon, Button } from 'react-native-elements'
+import { LogBox } from 'react-native'
 
 const Home = ({ navigation }: any) => {
-  //todo: menuFilter will be scrollable
+
+  LogBox.ignoreLogs(['image']) // someone created a product without an image uri
 
   const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJlcmtlYWx0aXBhcm1ha0BvdXRsb29rLmNvbSIsImdpdGh1YiI6Imh0dHBzOi8vZ2l0aHViLmNvbS9iYWxwYSIsImlhdCI6MTY2NTQ4Mjc1MywiZXhwIjoxNjY1OTE0NzUzfQ.VhiCfm_D6wU1V-UX1lU_CkZAqAdil_ePiMPKJ9D-lBE'
-
-  const [apiData, setApiData] = useState<any>()
 
   const API_ENDPOINTS = {
     products: 'https://upayments-studycase-api.herokuapp.com/api/products',
     categories: 'https://upayments-studycase-api.herokuapp.com/api/categories'
   }
+
+  const [apiData, setApiData] = useState<any>()
+  const [selectedFilter, setSelectedFilter] = useState<string>('All')
 
   useEffect(() => {
     fetch(`${API_ENDPOINTS.products}`, {
@@ -52,12 +55,12 @@ const Home = ({ navigation }: any) => {
           showsHorizontalScrollIndicator={false}
           horizontal={true}
           contentContainerStyle={styles.filterMenuScrollView}>
-          <FilterMenuItem filterName={'All'} isSelected={false} />
-          <FilterMenuItem filterName={'Accessories'} isSelected={false} />
-          <FilterMenuItem filterName={'Women\'s-Clothing'} isSelected={false} />
-          <FilterMenuItem filterName={'Men\'s-Clothing'} isSelected={false} />
-          <FilterMenuItem filterName={'Furnitures'} isSelected={false} />
-          <FilterMenuItem filterName={'Electronics'} isSelected={false} />
+          <FilterMenuItem filterName={'All'} setSelectedFilter={setSelectedFilter} filter={selectedFilter} />
+          <FilterMenuItem filterName={'Accessories'} setSelectedFilter={setSelectedFilter} filter={selectedFilter} />
+          <FilterMenuItem filterName={'Women\'s-Clothing'} setSelectedFilter={setSelectedFilter} filter={selectedFilter} />
+          <FilterMenuItem filterName={'Men\'s-Clothing'} setSelectedFilter={setSelectedFilter} filter={selectedFilter} />
+          <FilterMenuItem filterName={'Furnitures'} setSelectedFilter={setSelectedFilter} filter={selectedFilter} />
+          <FilterMenuItem filterName={'Electronics'} setSelectedFilter={setSelectedFilter} filter={selectedFilter} />
         </ScrollView>
       </View>
       <View>
