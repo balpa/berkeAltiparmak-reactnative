@@ -4,11 +4,6 @@ import ProductComponent from '../components/ProductComponent'
 import FilterMenuItem from '../components/FilterMenuItem'
 import { Icon, Button } from 'react-native-elements'
 
-interface apiDataType {
-
-}
-
-
 const Home = ({ navigation }: any) => {
   //todo: menuFilter will be scrollable
 
@@ -59,8 +54,8 @@ const Home = ({ navigation }: any) => {
           contentContainerStyle={styles.filterMenuScrollView}>
           <FilterMenuItem filterName={'All'} isSelected={false} />
           <FilterMenuItem filterName={'Accessories'} isSelected={false} />
-          <FilterMenuItem filterName={'Womens-Clothing'} isSelected={false} />
-          <FilterMenuItem filterName={'Mens-Clothing'} isSelected={false} />
+          <FilterMenuItem filterName={'Women\'s-Clothing'} isSelected={false} />
+          <FilterMenuItem filterName={'Men\'s-Clothing'} isSelected={false} />
           <FilterMenuItem filterName={'Furnitures'} isSelected={false} />
           <FilterMenuItem filterName={'Electronics'} isSelected={false} />
         </ScrollView>
@@ -69,7 +64,7 @@ const Home = ({ navigation }: any) => {
         {apiData != undefined ?
           <FlatList
             data={apiData.products}
-            renderItem={({ item }) => (<ProductComponent key={item} data={item} />)}
+            renderItem={({ item }) => (<ProductComponent key={item} data={item} navigation={navigation} />)}
             keyExtractor={(item, index) => index.toString()}
             ListEmptyComponent={() => <Text>No data yet</Text>}
             numColumns={2}

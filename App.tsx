@@ -18,6 +18,9 @@ export default function App() {
           component={Home} />
         <Stack.Screen
           name='Detail'
+          options={({ route }: any) => ({
+            title: route.params.name
+          })}
           component={ProductDetail} />
         <Stack.Screen
           name='Create'
