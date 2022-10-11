@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 
 const CreateProduct = () => {
   //category selector could be done with comps
-  //input only wanna return number type, need a fix
+  //input only wanna return string type, need a fix (:)
 
   const [productTitle, setProductTitle] = useState<string>('')
   const [productPrice, setProductPrice] = useState<string>('')

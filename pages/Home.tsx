@@ -1,12 +1,35 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import ProductComponent from '../components/ProductComponent'
 import FilterMenuItem from '../components/FilterMenuItem'
 import { Icon, Button } from 'react-native-elements'
 
+interface apiDataType {
+
+}
+
 
 const Home = ({ navigation }: any) => {
   //todo: menuFilter will be scrollable
+
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJlcmtlYWx0aXBhcm1ha0BvdXRsb29rLmNvbSIsImdpdGh1YiI6Imh0dHBzOi8vZ2l0aHViLmNvbS9iYWxwYSIsImlhdCI6MTY2NTQ4Mjc1MywiZXhwIjoxNjY1OTE0NzUzfQ.VhiCfm_D6wU1V-UX1lU_CkZAqAdil_ePiMPKJ9D-lBE'
+
+  const [apiData, setApiData] = useState<any>()
+
+  const API_ENDPOINTS = {
+    products: 'https://upayments-studycase-api.herokuapp.com/api/products',
+    categories: 'https://upayments-studycase-api.herokuapp.com/api/categories'
+  }
+
+  useEffect(() => {
+    fetch(`${API_ENDPOINTS.products}`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` },
+    })
+      .then((response) => response.json())
+      .then((responseData: any) => setApiData(responseData))
+  }, [])
+
 
   const searchProduct = () => {
     console.log('search button pressed')
@@ -42,16 +65,17 @@ const Home = ({ navigation }: any) => {
           <FilterMenuItem filterName={'Electronics'} isSelected={false} />
         </ScrollView>
       </View>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.productsScrollView}
-      >
-        <ProductComponent />
-        <ProductComponent />
-        <ProductComponent />
-        <ProductComponent />
-        <ProductComponent />
-      </ScrollView>
+      <View>
+        {apiData != undefined ?
+          <FlatList
+            data={apiData.products}
+            renderItem={({ item }) => (<ProductComponent key={item} data={item} />)}
+            keyExtractor={(item, index) => index.toString()}
+            ListEmptyComponent={() => <Text>No data yet</Text>}
+            numColumns={2}
+          /> : null
+        }
+      </View>
       <TouchableOpacity
         style={styles.createButtonContainer}
         onPress={() => goToCreateProductPage()}>
@@ -111,6 +135,5 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap'
-
   }
 })

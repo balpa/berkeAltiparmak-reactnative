@@ -1,13 +1,18 @@
 import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
 import React from 'react'
 
-const ProductComponent = () => {
+interface propTypes {
+  data: any
+}
+
+const ProductComponent = ({ data }: propTypes) => {
 
   const window = useWindowDimensions()
 
   return (
     <View style={[styles.container, { width: window.width / 2 - 10 }]}>
-      <Text>ProductComponent</Text>
+      <Text>{data.name}</Text>
+
     </View>
   )
 }
