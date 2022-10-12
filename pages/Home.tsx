@@ -5,6 +5,10 @@ import FilterMenuItem from '../components/FilterMenuItem'
 import { Icon, Button } from 'react-native-elements'
 import { LogBox } from 'react-native'
 
+interface propTypes {
+  item: React.ReactNode
+}
+
 const Home = ({ navigation }: any) => {
 
   LogBox.ignoreLogs(['image']) // someone created a product without an image uri
@@ -17,15 +21,23 @@ const Home = ({ navigation }: any) => {
   }
 
   const [apiData, setApiData] = useState<any>()
+  const [apiCategoriesData, setApiCategoriesData] = useState<any>()
   const [selectedFilter, setSelectedFilter] = useState<string>('All')
 
   useEffect(() => {
-    fetch(`${API_ENDPOINTS.products}`, {
+    fetch(`${API_ENDPOINTS.products}`, {    //fetch products
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` },
     })
       .then((response) => response.json())
       .then((responseData: any) => setApiData(responseData))
+
+    fetch(`${API_ENDPOINTS.categories}`, {    //fetch categories
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` },
+    })
+      .then((response) => response.json())
+      .then((responseData: any) => setApiCategoriesData(responseData))
   }, [])
 
 
@@ -55,12 +67,21 @@ const Home = ({ navigation }: any) => {
           showsHorizontalScrollIndicator={false}
           horizontal={true}
           contentContainerStyle={styles.filterMenuScrollView}>
-          <FilterMenuItem filterName={'All'} setSelectedFilter={setSelectedFilter} filter={selectedFilter} />
-          <FilterMenuItem filterName={'Accessories'} setSelectedFilter={setSelectedFilter} filter={selectedFilter} />
-          <FilterMenuItem filterName={'Women\'s-Clothing'} setSelectedFilter={setSelectedFilter} filter={selectedFilter} />
-          <FilterMenuItem filterName={'Men\'s-Clothing'} setSelectedFilter={setSelectedFilter} filter={selectedFilter} />
-          <FilterMenuItem filterName={'Furnitures'} setSelectedFilter={setSelectedFilter} filter={selectedFilter} />
-          <FilterMenuItem filterName={'Electronics'} setSelectedFilter={setSelectedFilter} filter={selectedFilter} />
+          <FilterMenuItem
+            filterName='All'
+            setSelectedFilter={setSelectedFilter}
+            filter={selectedFilter}
+          />
+          {apiCategoriesData != undefined ?
+            apiCategoriesData.categories.map((item: any) => {
+              return (
+                <FilterMenuItem
+                  filterName={item.name}
+                  setSelectedFilter={setSelectedFilter}
+                  filter={selectedFilter}
+                />
+              )
+            }) : {}}
         </ScrollView>
       </View>
       <View>
