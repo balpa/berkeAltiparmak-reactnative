@@ -66,7 +66,7 @@ const ProductComponent = ({ data, navigation, selectedFilter }: propTypes) => {
         </View>
       </TouchableOpacity>
     )
-  } else { return null }
+  } else return null
 }
 
 export default ProductComponent

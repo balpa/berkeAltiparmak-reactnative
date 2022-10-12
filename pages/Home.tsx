@@ -10,6 +10,7 @@ interface propTypes {
 }
 
 const Home = ({ navigation }: any) => {
+  //todo: fix flatlist gaps
 
   LogBox.ignoreLogs(['image']) // someone created a product without an image uri
 
@@ -23,6 +24,7 @@ const Home = ({ navigation }: any) => {
   const [apiData, setApiData] = useState<any>()
   const [apiCategoriesData, setApiCategoriesData] = useState<any>()
   const [selectedFilter, setSelectedFilter] = useState<string>('All')
+  const [filteredProductData, setFilteredProductData] = useState<any[]>()
 
   useEffect(() => {
     fetch(`${API_ENDPOINTS.products}`, {    //fetch products
@@ -40,6 +42,15 @@ const Home = ({ navigation }: any) => {
       .then((responseData: any) => setApiCategoriesData(responseData))
   }, [])
 
+  // useEffect(() => {
+  //   if (apiData != undefined) {
+  //     apiData.products.map((item: any) => {
+  //       if (item.category == selectedFilter) {
+  //         setFilteredProductData(oldItem => [...[oldItem], item])
+  //       }
+  //     })
+  //   }
+  // }, [selectedFilter])
 
   const searchProduct = () => {
     console.log('search button pressed')
