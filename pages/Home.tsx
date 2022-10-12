@@ -72,23 +72,27 @@ const Home = ({ navigation }: any) => {
             setSelectedFilter={setSelectedFilter}
             filter={selectedFilter}
           />
+          {/*LISTING CATEGORIES*/}
           {apiCategoriesData != undefined ?
             apiCategoriesData.categories.map((item: any) => {
               return (
                 <FilterMenuItem
+                  key={item.name}
                   filterName={item.name}
                   setSelectedFilter={setSelectedFilter}
                   filter={selectedFilter}
                 />
               )
-            }) : {}}
+            }) : null}
         </ScrollView>
       </View>
       <View>
+        {/* LISTING PRODUCTS*/}
         {apiData != undefined ?
           <FlatList
+            extraData={selectedFilter}
             data={apiData.products}
-            renderItem={({ item }) => (<ProductComponent key={item} data={item} navigation={navigation} />)}
+            renderItem={({ item }) => (<ProductComponent key={item} data={item} navigation={navigation} selectedFilter={selectedFilter} />)}
             keyExtractor={(item, index) => index.toString()}
             ListEmptyComponent={() => <Text>No data yet</Text>}
             numColumns={2}

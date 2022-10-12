@@ -4,39 +4,69 @@ import { NavigationProp } from '@react-navigation/native'
 
 interface propTypes {
   data: any,
-  navigation: any
+  navigation: any,
+  selectedFilter: any
 }
 
-const ProductComponent = ({ data, navigation }: propTypes) => {
+const ProductComponent = ({ data, navigation, selectedFilter }: propTypes) => {
 
   const window = useWindowDimensions()
 
-  return (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("Detail", {
-          name: `${data.name}`,
-          userID: `${data._id}`,
-          description: `${data.description}`,
-          imageURI: `${data.avatar}`,
-          price: `${data.price}`
-        })
-      }}
-    >
-      <View style={[styles.container, { width: window.width / 2 - 10 }]}>
-        <View style={styles.upper}>
-          <Image
-            resizeMode='contain'
-            style={styles.avatar}
-            source={{ uri: data.avatar }} />
+  if (selectedFilter === data.category) {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Detail", {
+            name: `${data.name}`,
+            userID: `${data._id}`,
+            description: `${data.description}`,
+            imageURI: `${data.avatar}`,
+            price: `${data.price}`
+          })
+        }}
+      >
+        <View style={[styles.container, { width: window.width / 2 - 10 }]}>
+          <View style={styles.upper}>
+            <Image
+              resizeMode='contain'
+              style={styles.avatar}
+              source={{ uri: data.avatar }} />
+          </View>
+          <View style={styles.lower}>
+            <Text numberOfLines={1} style={styles.lowerText}>{data.name}</Text>
+            <Text numberOfLines={1} style={styles.lowerText}>${data.price}</Text>
+          </View>
         </View>
-        <View style={styles.lower}>
-          <Text numberOfLines={1} style={styles.lowerText}>{data.name}</Text>
-          <Text numberOfLines={1} style={styles.lowerText}>${data.price}</Text>
+      </TouchableOpacity>
+    )
+  } else if (selectedFilter == 'All') {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Detail", {
+            name: `${data.name}`,
+            userID: `${data._id}`,
+            description: `${data.description}`,
+            imageURI: `${data.avatar}`,
+            price: `${data.price}`
+          })
+        }}
+      >
+        <View style={[styles.container, { width: window.width / 2 - 10 }]}>
+          <View style={styles.upper}>
+            <Image
+              resizeMode='contain'
+              style={styles.avatar}
+              source={{ uri: data.avatar }} />
+          </View>
+          <View style={styles.lower}>
+            <Text numberOfLines={1} style={styles.lowerText}>{data.name}</Text>
+            <Text numberOfLines={1} style={styles.lowerText}>${data.price}</Text>
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
-  )
+      </TouchableOpacity>
+    )
+  } else { return null }
 }
 
 export default ProductComponent
