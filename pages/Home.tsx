@@ -84,7 +84,8 @@ const Home = ({ navigation }: any) => {
             filter={selectedFilter}
           />
           {/*LISTING CATEGORIES*/}
-          {apiCategoriesData != undefined ?
+          {apiCategoriesData != undefined
+            ?
             apiCategoriesData.categories.map((item: any) => {
               return (
                 <FilterMenuItem
@@ -94,26 +95,28 @@ const Home = ({ navigation }: any) => {
                   filter={selectedFilter}
                 />
               )
-            }) : null}
+            })
+            : null}
         </ScrollView>
       </View>
       <View>
         {/* LISTING PRODUCTS*/}
-        {apiData != undefined ?
+        {apiData != undefined
+          ?
           <FlatList
             extraData={selectedFilter}
             data={apiData.products.filter((item: any) => {
-              if (item.category == selectedFilter) {
-                return apiData.products
-              } else if (selectedFilter === 'All') {
-                return apiData.products
-              }
+              if (item.category == selectedFilter) { return apiData.products }
+              else if (selectedFilter === 'All') { return apiData.products }
             })}
-            renderItem={({ item }) => (<ProductComponent key={item} data={item} navigation={navigation} selectedFilter={selectedFilter} />)}
+            renderItem={({ item }) => (
+              <ProductComponent key={item} data={item} navigation={navigation} selectedFilter={selectedFilter} />
+            )}
             keyExtractor={(item, index) => index.toString()}
             ListEmptyComponent={() => <Text style={{ fontSize: 32, fontWeight: '900' }}>Empty</Text>}
             numColumns={2}
-          /> : null
+          />
+          : null
         }
       </View>
       <TouchableOpacity
