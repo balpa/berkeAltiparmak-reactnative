@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList, ListRenderItem, FlatListProps } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ProductComponent from '../components/ProductComponent'
 import FilterMenuItem from '../components/FilterMenuItem'
@@ -6,7 +6,7 @@ import { Icon, Button } from 'react-native-elements'
 import { LogBox } from 'react-native'
 
 interface propTypes {
-  item: React.ReactNode
+  item: React.ReactNode,
 }
 
 const Home = ({ navigation }: any) => {
@@ -102,10 +102,16 @@ const Home = ({ navigation }: any) => {
         {apiData != undefined ?
           <FlatList
             extraData={selectedFilter}
-            data={apiData.products}
+            data={apiData.products.filter((item: any) => {
+              if (item.category == selectedFilter) {
+                return apiData.products
+              } else if (selectedFilter === 'All') {
+                return apiData.products
+              }
+            })}
             renderItem={({ item }) => (<ProductComponent key={item} data={item} navigation={navigation} selectedFilter={selectedFilter} />)}
             keyExtractor={(item, index) => index.toString()}
-            ListEmptyComponent={() => <Text>No data yet</Text>}
+            ListEmptyComponent={() => <Text style={{ fontSize: 32, fontWeight: '900' }}>Empty</Text>}
             numColumns={2}
           /> : null
         }
