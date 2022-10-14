@@ -24,10 +24,10 @@ const Home = ({ navigation }: any) => {
   const [apiData, setApiData] = useState<any>()
   const [apiCategoriesData, setApiCategoriesData] = useState<any>()
   const [selectedFilter, setSelectedFilter] = useState<string>('All')
-  const [filteredProductData, setFilteredProductData] = useState<any[]>()
+  const [dummyRefresher, setDummyRefresher] = useState<string>('')
 
-  useEffect(() => {
-    fetch(`${API_ENDPOINTS.products}`, {    //fetch products
+  useEffect(() => {   // fetching products
+    fetch(`${API_ENDPOINTS.products}`, {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` },
     })
@@ -40,17 +40,7 @@ const Home = ({ navigation }: any) => {
     })
       .then((response) => response.json())
       .then((responseData: any) => setApiCategoriesData(responseData))
-  }, [])
-
-  // useEffect(() => {
-  //   if (apiData != undefined) {
-  //     apiData.products.map((item: any) => {
-  //       if (item.category == selectedFilter) {
-  //         setFilteredProductData(oldItem => [...[oldItem], item])
-  //       }
-  //     })
-  //   }
-  // }, [selectedFilter])
+  }, [dummyRefresher])
 
   const searchProduct = () => {
     console.log('search button pressed')
@@ -110,7 +100,11 @@ const Home = ({ navigation }: any) => {
               else if (selectedFilter === 'All') { return apiData.products }
             })}
             renderItem={({ item }) => (
-              <ProductComponent key={item} data={item} navigation={navigation} selectedFilter={selectedFilter} />
+              <ProductComponent
+                key={item}
+                data={item}
+                navigation={navigation}
+                selectedFilter={selectedFilter} />
             )}
             keyExtractor={(item, index) => index.toString()}
             ListEmptyComponent={() => <Text style={{ fontSize: 32, fontWeight: '900' }}>Empty</Text>}

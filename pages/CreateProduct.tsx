@@ -1,19 +1,52 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInputChangeEventData } from 'react-native'
 import { Input } from 'react-native-elements'
 import React, { useState, useEffect } from 'react'
+import CategorySelectorComponent from '../components/CategorySelectorComponent'
 
-const CreateProduct = () => {
-  //category selector could be done with comps
-  //input only wanna return string type, need a fix (:)
+const CreateProduct = ({ navigation }: any) => {
+  let email = 'berkealtiparmak@outlook.com'
+
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJlcmtlYWx0aXBhcm1ha0BvdXRsb29rLmNvbSIsImdpdGh1YiI6Imh0dHBzOi8vZ2l0aHViLmNvbS9iYWxwYSIsImlhdCI6MTY2NTQ4Mjc1MywiZXhwIjoxNjY1OTE0NzUzfQ.VhiCfm_D6wU1V-UX1lU_CkZAqAdil_ePiMPKJ9D-lBE'
 
   const [productTitle, setProductTitle] = useState<string>('')
   const [productPrice, setProductPrice] = useState<string>('')
   const [productDescription, setProductDescription] = useState<string>('')
-  const [productImageLink, setProductImageLink] = useState<string>('')
+  const [productImageLink, setProductImageLink] = useState<string>('https://m.media-amazon.com/images/I/719P4CoU+8L._AC_SY695_.jpg')
   const [selectedCategory, setSelectedCategory] = useState<string>('')
+  const [apiCategoriesData, setApiCategoriesData] = useState<any>()
+
+  useEffect(() => {
+    fetch('https://upayments-studycase-api.herokuapp.com/api/categories', {    //fetch categories
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` },
+    })
+      .then((response) => response.json())
+      .then((responseData: any) => setApiCategoriesData(responseData))
+  }, [])
 
   const addProduct = () => {
-    console.log('button works')
+    if (productTitle != '' && productPrice != '' && productDescription != '' && productImageLink != '' && selectedCategory != '') {
+      fetch('https://upayments-studycase-api.herokuapp.com/api/products', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: productTitle,
+          price: parseInt(productPrice),
+          category: selectedCategory,
+          description: productDescription,
+          avatar: productImageLink,
+          developerEmail: email
+        })
+      })
+        .then((response) => response.json())
+        .then((data) => { console.log(data) })
+        .then(() => navigation.navigate('Home'))
+        .catch((err) => { console.log(err.message) })
+    } else { console.log('Something\'s null or etc') }
   }
 
   return (
@@ -53,46 +86,15 @@ const CreateProduct = () => {
         Selected Category: {selectedCategory}
       </Text>
       <ScrollView horizontal={true}>
-        <TouchableOpacity
-          style={[styles.categorySelector, selectedCategory === 'Accessories' ? { backgroundColor: 'black' } : {}]}
-          onPress={() => setSelectedCategory('Accessories')}>
-          <Text
-            style={selectedCategory === 'Accessories' ? { color: 'white' } : {}}>
-            Accessories
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.categorySelector, selectedCategory === 'Women-Clothings' ? { backgroundColor: 'black' } : {}]}
-          onPress={() => setSelectedCategory('Women-Clothings')}>
-          <Text
-            style={selectedCategory === 'Women-Clothings' ? { color: 'white' } : {}}>
-            Women-Clothings
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.categorySelector, selectedCategory === 'Men-Clothings' ? { backgroundColor: 'black' } : {}]}
-          onPress={() => setSelectedCategory('Men-Clothings')}>
-          <Text
-            style={selectedCategory === 'Men-Clothings' ? { color: 'white' } : {}}>
-            Men-Clothings
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.categorySelector, selectedCategory === 'Furnitures' ? { backgroundColor: 'black' } : {}]}
-          onPress={() => setSelectedCategory('Furnitures')}>
-          <Text
-            style={selectedCategory === 'Furnitures' ? { color: 'white' } : {}}>
-            Furnitures
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.categorySelector, selectedCategory === 'Electronics' ? { backgroundColor: 'black' } : {}]}
-          onPress={() => setSelectedCategory('Electronics')}>
-          <Text
-            style={selectedCategory === 'Electronics' ? { color: 'white' } : {}}>
-            Electronics
-          </Text>
-        </TouchableOpacity>
+        {apiCategoriesData && apiCategoriesData.categories.map((item: any, index: any) => {
+          return (
+            <CategorySelectorComponent
+              key={index}
+              categoryData={item}
+              setSelectedCategory={setSelectedCategory}
+              selectedCategory={selectedCategory}
+            />)
+        })}
       </ScrollView>
       <TouchableOpacity style={styles.addProductButton} onPress={() => { addProduct() }}>
         <Text style={{ color: 'white' }}>Add Product</Text>
