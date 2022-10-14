@@ -10,7 +10,6 @@ interface propTypes {
 }
 
 const Home = ({ navigation }: any) => {
-  //todo: fix flatlist gaps
 
   LogBox.ignoreLogs(['image']) // someone created a product without an image uri
 
@@ -25,8 +24,9 @@ const Home = ({ navigation }: any) => {
   const [apiCategoriesData, setApiCategoriesData] = useState<any>()
   const [selectedFilter, setSelectedFilter] = useState<string>('All')
   const [dummyRefresher, setDummyRefresher] = useState<string>('')
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
 
-  useEffect(() => {   // fetching products
+  const fetchData = () => {
     fetch(`${API_ENDPOINTS.products}`, {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` },
@@ -40,22 +40,27 @@ const Home = ({ navigation }: any) => {
     })
       .then((response) => response.json())
       .then((responseData: any) => setApiCategoriesData(responseData))
-  }, [dummyRefresher])
+  }
 
-  const searchProduct = () => {
-    console.log('search button pressed')
+  const refreshPage = () => { // pull down to refresh, illusion for the animation
+    setIsRefreshing(true)
+    fetchData()
+    setTimeout(() => { setIsRefreshing(false) }, 500)
   }
 
   const goToCreateProductPage = () => {
     navigation.navigate('Create')
   }
 
+  useEffect(() => {   // fetching products
+    fetchData()
+  }, [])
+
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
         <Text style={styles.upaymentsText}>UPayments Store</Text>
-        <TouchableOpacity
-          onPress={() => searchProduct()}>
+        <TouchableOpacity>
           <Icon
             iconStyle={{ fontSize: 25 }}
             name='search'
@@ -109,6 +114,8 @@ const Home = ({ navigation }: any) => {
             keyExtractor={(item, index) => index.toString()}
             ListEmptyComponent={() => <Text style={{ fontSize: 32, fontWeight: '900' }}>Empty</Text>}
             numColumns={2}
+            refreshing={isRefreshing}
+            onRefresh={() => refreshPage()}
           />
           : null
         }
