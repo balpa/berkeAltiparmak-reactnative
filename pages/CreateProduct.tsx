@@ -11,7 +11,7 @@ const CreateProduct = ({ navigation }: any) => {
   const [productTitle, setProductTitle] = useState<string>('')
   const [productPrice, setProductPrice] = useState<string>('')
   const [productDescription, setProductDescription] = useState<string>('')
-  const [productImageLink, setProductImageLink] = useState<string>('https://m.media-amazon.com/images/I/719P4CoU+8L._AC_SY695_.jpg')
+  const [productImageLink, setProductImageLink] = useState<string>('')
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [apiCategoriesData, setApiCategoriesData] = useState<any>()
 
