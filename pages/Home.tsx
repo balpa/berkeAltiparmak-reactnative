@@ -23,7 +23,6 @@ const Home = ({ navigation }: any) => {
   const [apiData, setApiData] = useState<any>()
   const [apiCategoriesData, setApiCategoriesData] = useState<any>()
   const [selectedFilter, setSelectedFilter] = useState<string>('All')
-  const [dummyRefresher, setDummyRefresher] = useState<string>('')
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
 
   const fetchData = () => {

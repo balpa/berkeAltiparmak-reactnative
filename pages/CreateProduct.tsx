@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInputChangeEventData } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
 import { Input } from 'react-native-elements'
 import React, { useState, useEffect } from 'react'
 import CategorySelectorComponent from '../components/CategorySelectorComponent'
